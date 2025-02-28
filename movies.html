@@ -116,7 +116,7 @@
             gap: 10px;
         }
 
-        .movie-card {
+        .movie-card, .search-card {
             position: relative;
             min-width: 200px;
             height: 120px;
@@ -126,7 +126,7 @@
             transition: transform 0.3s;
         }
 
-        .movie-card img {
+        .movie-card img, .search-card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -144,7 +144,7 @@
             z-index: 1;
         }
 
-        .movie-card:hover {
+        .movie-card:hover, .search-card:hover {
             transform: scale(1.05);
         }
 
@@ -207,25 +207,6 @@
             gap: 10px;
             max-height: 70vh;
             overflow-y: auto; 
-        }
-
-        .search-card {
-            background-color: #222;
-            border-radius: 5px;
-            padding: 10px;
-            flex: 1 1 200px;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .search-card img {
-            width: 100%;
-            border-radius: 5px;
-            margin-bottom: 5px;
-        }
-
-        .search-card:hover {
-            transform: scale(1.05);
         }
 
         .movie-page {
@@ -308,13 +289,14 @@
         }
 
         .movie-player {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: black;
-            z-index: 500;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000; /* Use a higher z-index */
+            display: none; /* Initially hidden */
         }
 
         .movie-player iframe {
@@ -322,11 +304,170 @@
             height: 100%;
             border: none;
         }
+
+        /* Show selection styles */
+        .seasons-container {
+            text-align: center;
+            margin: 20px 0;
+            display: none; /* Initially hidden */
+        }
+
+        .season-button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border: 1px solid red;
+            background-color: transparent;
+            color: red;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .season-button:hover {
+            background-color: red;
+            color: white;
+        }
+
+        .episode-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .episode-card {
+            position: relative;
+            min-width: 200px;
+            height: 100px;
+            overflow: hidden;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            border: 2px solid transparent; /* Button effect */
+        }
+
+        .episode-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .episode-title {
+            position: absolute;
+            bottom: 5px;
+            left: 10px;
+            font-size: 16px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 3px 6px;
+            border-radius: 3px;
+            z-index: 1;
+        }
+
+        /* Style for the selected show page */
+        .show-page {
+            display: none; /* Initially hidden */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #141414;
+            z-index: 1000;
+            padding: 40px;
+            box-sizing: border-box;
+            overflow-y: auto; 
+        }
+
+        .show-page .hero {
+            height: 50vh; /* Adjust height for show page hero */
+            background-size: cover;
+            background-position: center;
+        }
+
+        .show-page .hero-content {
+            z-index: 10;
+            position: relative;
+            margin: 20px; /* Add margin */
+        }
+
+        .show-page .show-title {
+            font-size: 48px;
+            margin-top: 10px;
+            color: white;
+        }
+
+        .show-page .show-desc {
+            font-size: 20px;
+            margin-top: 10px;
+            color: grey;
+        }
+
+        .show-page .play-button {
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            background-color: red;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: background 0.3s;
+        }
+
+        .show-page .play-button:hover {
+            background-color: darkred;
+        }
+
+        .show-page .episodes-header {
+            color: white;
+            margin: 20px 0;
+            font-size: 30px;
+        }
+
+        .exit-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            color: #fff;
+            background: rgba(255, 0, 0, 0.8);
+            border: none;
+            border-radius: 50%;
+            padding: 10px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+            z-index: 2000;
+        }
+
+        .exit-button:hover {
+            background: rgba(255, 0, 0, 1);
+            transform: scale(1.1);
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.8);
+            border: none;
+            border-radius: 50%;
+            padding: 10px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+            z-index: 2000;
+        }
+
+        .back-button:hover {
+            background: rgba(0, 0, 0, 1);
+            transform: scale(1.1);
+        }
     </style>
 </head>
 
 <body>
-    <audio id="bgAudio" src="meteor.wav" autoplay loop></audio>
+    <audio id="bgAudio" src="no aud" autoplay loop></audio>
     <header>
         <div class="navbar">
             <img src="netflix.png" alt="Orbit TV Logo" class="logo">
@@ -338,7 +479,7 @@
             <h1 id="hero-title">Loading...</h1>
             <p id="hero-desc">Please wait...</p>
             <div class="hero-buttons">
-                <button class="play-button">▶ Play</button>
+                <button class="play-button" onclick="playHeroMovie()">▶ Play</button>
                 <button class="info-button" onclick="openSearchPage()">Search</button>
             </div>
         </div>
@@ -355,12 +496,32 @@
     </section>
 
     <div class="search-page" id="searchPage">
-        <h1 class="search-title">Search Movies</h1>
+        <h1 class="search-title">Search Movies and Shows</h1>
         <div class="search-bar">
-            <input type="text" id="searchBar" placeholder="Search for movies...">
+            <input type="text" id="searchBar" placeholder="Search for movies or shows...">
             <button class="close-search" onclick="closeSearchPage()">Back</button>
         </div>
         <div class="search-results" id="searchResults"></div>
+    </div>
+
+    <div class="show-page" id="showPage">
+        <button class="exit-button" id="exitShowPage" onclick="closeShowPage()"><i class="fas fa-arrow-left"></i></button>
+        <div class="hero" id="showHero" style="background-image: url('');">
+            <div class="hero-content">
+                <h1 class="show-title" id="showTitle"></h1>
+                <p class="show-desc" id="showDesc"></p>
+                <button class="play-button" id="playShowButton" onclick="playFirstEpisode()">▶ Play First Episode</button>
+            </div>
+        </div>
+        <div class="episodes-header">Select a Season:</div>
+        <div class="seasons-container" id="seasonsContainer"></div>
+        <div class="episodes-header">Episodes:</div>
+        <div class="episode-row" id="episodeRow"></div>
+    </div>
+
+    <div class="movie-player" id="moviePlayer">
+        <button class="back-button" id="backEpisodeButton" onclick="closePlayer()"><i class="fas fa-arrow-left"></i></button>
+        <iframe id="movieIframe" src=""></iframe>
     </div>
 
     <div class="movie-page" id="moviePage">
@@ -368,10 +529,7 @@
         <img id="movieImage" src="" alt="Movie">
         <div class="title" id="movieTitle"></div>
         <div class="play-btn">
-            <button id="playMovieButton"><i class="fas fa-play"></i> Play</button>
-        </div>
-        <div class="movie-player" id="moviePlayer" style="display: none;">
-            <iframe id="movieIframe" src=""></iframe>
+            <button id="playMovieButton" onclick="playMovie()">▶ Play</button>
         </div>
     </div>
 
@@ -384,7 +542,7 @@
         const BASE_URL = 'https://api.themoviedb.org/3';
         const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
-        let currentMovieId;
+        let currentMovieId, currentShowId, currentSeasonNumber, currentEpisodeNumber;
 
         async function fetchMovies(endpoint, containerId) {
             const res = await fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}`);
@@ -416,54 +574,143 @@
             document.getElementById('hero-banner').style.backgroundImage = `url(${IMG_URL}${movie.backdrop_path})`;
             document.getElementById('hero-title').textContent = movie.title;
             document.getElementById('hero-desc').textContent = movie.overview;
+            currentMovieId = movie.id; // Save the id of the hero movie.
         }
 
         async function fetchMoviesForSearch(query) {
-            const res = await fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
+            const res = await fetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
             const data = await res.json();
             displaySearchResults(data.results);
         }
 
-        function displaySearchResults(movies) {
+        function displaySearchResults(results) {
             const resultsContainer = document.getElementById('searchResults');
             resultsContainer.innerHTML = '';
-            movies.forEach(movie => {
-                if (movie.poster_path) {
-                    const movieCard = document.createElement('div');
-                    movieCard.classList.add('search-card');
-                    movieCard.onclick = () => openMoviePage(movie.id, movie.title, movie.poster_path);
-                    movieCard.innerHTML = `
-                        <img src="${IMG_URL}${movie.poster_path}" alt="${movie.title}">
-                        <div class="movie-title">${movie.title}</div>
+            results.forEach(item => {
+                if (item.poster_path) {
+                    const card = document.createElement('div');
+                    card.classList.add('search-card');
+                    card.onclick = () => {
+                        if (item.media_type === 'movie') {
+                            openMoviePage(item.id, item.title, item.poster_path);
+                        } else if (item.media_type === 'tv') {
+                            openShowPage(item.id, item.name);
+                        }
+                    };
+                    card.innerHTML = `
+                        <img src="${IMG_URL}${item.poster_path}" alt="${item.title}">
+                        <div class="movie-title">${item.title || item.name}</div>
                     `;
-                    resultsContainer.appendChild(movieCard);
+                    resultsContainer.appendChild(card);
                 }
             });
         }
 
-        function openMoviePage(movieId, title, posterPath) {
+        async function openShowPage(showId, title) {
+            currentShowId = showId;
             document.getElementById('bgAudio').pause();
-            currentMovieId = movieId;
+            
+            const res = await fetch(`${BASE_URL}/tv/${showId}?api_key=${API_KEY}`);
+            const showData = await res.json();
+            document.getElementById('showHero').style.backgroundImage = `url(${IMG_URL}${showData.backdrop_path})`;
+            document.getElementById('showTitle').textContent = title;
+            document.getElementById('showDesc').textContent = showData.overview;
+            document.getElementById('showPage').style.display = 'block';
+
+            await loadSeasons(showId);
+        }
+
+        async function loadSeasons(showId) {
+            const res = await fetch(`${BASE_URL}/tv/${showId}?api_key=${API_KEY}`);
+            const showData = await res.json();
+            const seasonsContainer = document.getElementById('seasonsContainer');
+            seasonsContainer.innerHTML = '';
+            showData.seasons.forEach(season => {
+                if (season.season_number > 0) { // Ignore season 0
+                    const seasonButton = document.createElement('button');
+                    seasonButton.classList.add('season-button');
+                    seasonButton.textContent = `Season ${season.season_number}`;
+                    seasonButton.onclick = () => loadEpisodes(showId, season.season_number);
+                    seasonsContainer.appendChild(seasonButton);
+                }
+            });
+            seasonsContainer.style.display = 'block'; // Show seasons
+        }
+
+        async function loadEpisodes(showId, seasonNumber) {
+            currentSeasonNumber = seasonNumber;
+            const res = await fetch(`${BASE_URL}/tv/${showId}/season/${seasonNumber}?api_key=${API_KEY}`);
+            const data = await res.json();
+            const episodeRow = document.getElementById('episodeRow');
+            episodeRow.innerHTML = '';
+            data.episodes.forEach(episode => {
+                const episodeCard = document.createElement('div');
+                episodeCard.classList.add('episode-card');
+                episodeCard.onclick = () => playEpisode(showId, seasonNumber, episode.episode_number); // Play selected episode
+                episodeCard.innerHTML = `
+                    <img src="${IMG_URL}${episode.still_path}" alt="${episode.name}">
+                    <div class="episode-title">${episode.name}</div>
+                `;
+                episodeRow.appendChild(episodeCard);
+            });
+        }
+
+        function playEpisode(showId, seasonNumber, episodeNumber) {
+            document.getElementById('bgAudio').pause();
+            document.getElementById('moviePlayer').style.display = "block";
+            // Play the episode using the specified format
+            document.getElementById('movieIframe').src = `https://play2.123embed.net/tv/${showId}/SEASON-${seasonNumber}/EP-${episodeNumber}`; 
+        }
+
+        async function openMoviePage(movieId, title, posterPath) {
+            currentMovieId = movieId; // Save the movie ID for playing later
+            document.getElementById('bgAudio').pause();
             document.getElementById('movieImage').src = `${IMG_URL}${posterPath}`;
             document.getElementById('movieTitle').textContent = title;
             document.getElementById('moviePage').style.display = 'block';
-            document.getElementById('moviePlayer').style.display = 'none'; 
+        }
+
+        function playMovie() {
+            // Logic to play the selected movie
+            document.getElementById('moviePage').style.display = 'none'; // Hide movie page
+            document.getElementById('moviePlayer').style.display = "block";
+            document.getElementById('movieIframe').src = `https://play2.123embed.net/movie/${currentMovieId}`; // URL to play the movie
+        }
+
+        function playFirstEpisode() {
+            // Automatically play the first episode of the first season
+            if (currentShowId) {
+                loadEpisodes(currentShowId, 1); // Load the first season episodes
+                playEpisode(currentShowId, 1, 1); // Play the first episode immediately
+            }
         }
 
         document.getElementById('closeMoviePage').addEventListener("click", () => {
             document.getElementById('bgAudio').play();
             document.getElementById('moviePage').style.display = 'none';
-            document.getElementById('moviePlayer').style.display = 'none';
-            document.getElementById('movieIframe').src = "";
             currentMovieId = null;
         });
 
-        document.getElementById('playMovieButton').addEventListener("click", () => {
-            if (currentMovieId) {
-                document.getElementById('moviePlayer').style.display = "block";
-                document.getElementById('movieIframe').src = `https://vidsrc.su/embed/movie/${currentMovieId}`;
-            }
+        document.getElementById('exitShowPage').addEventListener("click", () => {
+            document.getElementById('bgAudio').play();
+            document.getElementById('showPage').style.display = 'none';
+            currentShowId = null;
         });
+
+        document.getElementById('backEpisodeButton').addEventListener("click", closePlayer);
+
+        function closePlayer() {
+            document.getElementById('moviePlayer').style.display = 'none';
+            document.getElementById('movieIframe').src = ""; // Stop the episode from playing
+            document.getElementById('bgAudio').play(); // Resume background audio
+        }
+
+        document.getElementById('playShowButton').addEventListener("click", playFirstEpisode);
+
+        function playHeroMovie() {
+            // Logic to play the hero movie
+            playMovie(); // Call the function to play the selected hero movie
+        }
 
         function openSearchPage() {
             document.getElementById('searchPage').style.display = 'block';
@@ -484,6 +731,7 @@
             }
         });
 
+        // Initial Load
         loadHeroMovie();
         fetchMovies('/movie/popular', 'popular-movies');
         fetchMovies('/trending/movie/day', 'trending-movies');
